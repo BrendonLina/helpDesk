@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function Permissao()
     {
-        return $this->hasMany('App\Models\Permissao');
+        return $this->hasOne('App\Models\Permissao');
     }
 }

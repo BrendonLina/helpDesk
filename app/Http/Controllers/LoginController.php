@@ -34,7 +34,7 @@ class LoginController extends Controller
         return view('login');
     }
 
-    public function dashboard(Request $request)
+    public function dashboard(Request $request, $id=1)
     {
         $request->validate([
             'email' => 'required',
@@ -42,9 +42,9 @@ class LoginController extends Controller
         ]);
         $usuario = trim($request->input('email'));
         $password = trim($request->input('password'));
-        
+       
         $usuario = User::where('email', $usuario)->first();
-        
+
         if(!$usuario)
         {
             return redirect()->back()->with('danger', 'Email ou senha inválida!');

@@ -17,7 +17,7 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', [LoginController::class, 'login'])->name('login');
 
-Route::get('/dashboard', [LoginController::class, 'index'])->name('dashboard');
+Route::get('/dashboard/{id}', [LoginController::class, 'index'])->name('dashboard');
 Route::post('/dashboard', [LoginController::class, 'dashboard'])->name('dashboard');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 

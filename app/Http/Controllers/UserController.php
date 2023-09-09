@@ -37,12 +37,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $userAdmGeral = new User;
-
+ 
         $userAdmGeral->name = $request->name;
         $userAdmGeral->email = $request->email;
         $userAdmGeral->password = bcrypt($request->password);
-        $userAdmGeral->permissao_id = 3;
-
+        $userAdmGeral->permissao_id = 1;
+        // dd($userAdmGeral);
         $userAdmGeral->save();
 
         return redirect()->route('add.adm.geral')->with('success', 'ADM Geral cadastrado com sucesso');

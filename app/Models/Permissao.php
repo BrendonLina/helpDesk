@@ -18,6 +18,6 @@ class Permissao extends Model
 
     public function User()
     {
-        return $this->hasMany('App\Models\User');
+        return $this->hasOne('App\Models\User');
     }
 }
