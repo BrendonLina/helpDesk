@@ -15,20 +15,31 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', [LoginController::class, 'login'])->name('login');
-
-Route::get('/dashboard/{id}', [LoginController::class, 'index'])->name('dashboard');
-Route::post('/dashboard', [LoginController::class, 'dashboard'])->name('dashboard');
+Route::get('/', [LoginController::class, 'login']);
+Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/dashboard', [UserController::class, 'dashboard']);
 
-Route::get('/adicionaradmgeral', [UserController::class, 'adicionarAdmGeral'])->name('add.adm.geral');
-Route::post('/adicionaradmgeral', [UserController::class, 'store'])->name('add.adm.geral');
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/adicionaradm', [UserController::class, 'adicionarAdm'])->name('add.adm');
-Route::post('/adicionaradm', [UserController::class, 'adicionarAdmStore'])->name('add.adm');
+    Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
 
-Route::get('/adicionarcolaborador', [UserController::class, 'adicionarColaborador'])->name('add.colaborador');
-Route::post('/adicionarcolaborador', [UserController::class, 'adicionarColaboradorStore'])->name('add.colaborador');
+});
 
-Route::get('/adicionarpermissao', [UserController::class, 'adicionarpermissao'])->name('add.permissao');
-Route::post('/adicionarpermissao', [UserController::class, 'adicionarpermissaoStore'])->name('add.permissao');
+// Route::get('/', [LoginController::class, 'login'])->name('login');
+
+// Route::get('/dashboard/{id}', [LoginController::class, 'index'])->name('dashboard');
+// Route::post('/dashboard', [LoginController::class, 'dashboard'])->name('dashboard');
+// Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Route::get('/adicionaradmgeral', [UserController::class, 'adicionarAdmGeral'])->name('add.adm.geral');
+// Route::post('/adicionaradmgeral', [UserController::class, 'store'])->name('add.adm.geral');
+
+// Route::get('/adicionaradm', [UserController::class, 'adicionarAdm'])->name('add.adm');
+// Route::post('/adicionaradm', [UserController::class, 'adicionarAdmStore'])->name('add.adm');
+
+// Route::get('/adicionarcolaborador', [UserController::class, 'adicionarColaborador'])->name('add.colaborador');
+// Route::post('/adicionarcolaborador', [UserController::class, 'adicionarColaboradorStore'])->name('add.colaborador');
+
+// Route::get('/adicionarpermissao', [UserController::class, 'adicionarpermissao'])->name('add.permissao');
+// Route::post('/adicionarpermissao', [UserController::class, 'adicionarpermissaoStore'])->name('add.permissao');

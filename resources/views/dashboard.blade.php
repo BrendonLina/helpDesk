@@ -8,9 +8,7 @@
 </head>
 <body>
     <h1>Dashboard</h1>
-    <p>{{session()->get('usuario.usuario.email')}}</p>
-    <p>Permissao: </p>
-    <a href="{{route('add.permissao')}}">Adicionar Permissão</a>
-    <a href="{{route('logout')}}">Sair</a>
+    <p>{{Auth::user()->permissao_id}}</p>
+    <a href="/logout">sair</a>
 </body>
 </html>

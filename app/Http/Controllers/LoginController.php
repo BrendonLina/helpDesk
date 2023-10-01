@@ -4,78 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class LoginController extends Controller
 {
     
-    public function index()
+    public function login()
     {
-        $sessao = $this->checkSession();
-
-        if($sessao == "" ?? null ?? 0){
-            return redirect('/');
-        }
-      
-        if($this->checkSession())
-        {          
-            return view('dashboard');
-        }
-    }
-
-
-    public function login(Request $request)
-    {
-        if($this->checkSession())
-        {          
-            return view('dashboard');
+        if(Auth::check()){
+            return redirect('dashboard');
         }
 
         return view('login');
     }
 
-    public function dashboard(Request $request, $id=1)
+    public function logout()
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-        $usuario = trim($request->input('email'));
-        $password = trim($request->input('password'));
-       
-        $usuario = User::where('email', $usuario)->first();
+        auth()->logout();
 
-        if(!$usuario)
-        {
-            return redirect()->back()->with('danger', 'Email ou senha inválida!');
-        }
-
-       if(Hash::check($password, $usuario->password))
-       {
-            $request->session()->put("usuario",[
-                'usuario' => $usuario,  
-            ]);
-
-            return view('dashboard', compact('usuario'));
-       }
-
-       else
-       {
-           return redirect()->back()->with('danger', 'Email ou senha inválida!');
-       }
-
-    }
-
-   
-    private function checkSession()
-    {
-        return session()->has('usuario');
-    }
-
-    public function logout(Request $request)
-    {
-        session()->forget('usuario');
-
-        return view('login');
+        return redirect('login');
     }
 }

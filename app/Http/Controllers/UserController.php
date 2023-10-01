@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Permissao;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Permissao;
 
 class UserController extends Controller
 {
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard');
     }
 
     /**
@@ -42,7 +43,7 @@ class UserController extends Controller
         $userAdmGeral->email = $request->email;
         $userAdmGeral->password = bcrypt($request->password);
         $userAdmGeral->permissao_id = 1;
-        // dd($userAdmGeral);
+        
         $userAdmGeral->save();
 
         return redirect()->route('add.adm.geral')->with('success', 'ADM Geral cadastrado com sucesso');
@@ -171,6 +172,30 @@ class UserController extends Controller
         $permissao->save();
 
         return redirect()->route('add.permissao')->with('success', 'Permissão cadastrada com sucesso');
+    }
+
+    public function dashboard(Request $request)
+    {
+        $credenciais = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ],[
+            'email.required' => 'Email é obrigatório.',
+            'email.email' => 'Email inválido.',
+            'password.required' => 'Senha obrigatória.'
+        ]);
+
+
+        if(Auth::attempt($credenciais)){
+
+            $request->session()->regenerate();
+            
+            return redirect()->intended('dashboard');
+        }
+        if(!Auth::check()){
+
+            return redirect()->back()->with('danger','Email ou Senha incorreto');
+        }
     }
 
     
