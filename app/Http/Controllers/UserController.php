@@ -35,18 +35,16 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        $userAdmGeral = new User;
- 
-        $userAdmGeral->name = $request->name;
-        $userAdmGeral->email = $request->email;
-        $userAdmGeral->password = bcrypt($request->password);
-        $userAdmGeral->permissao_id = 1;
-        
-        $userAdmGeral->save();
+        // dd($request->all());
+        $usuario = User::find($id);
 
-        return redirect()->route('add.adm.geral')->with('success', 'ADM Geral cadastrado com sucesso');
+        $usuario->permissao_id = $request->permissao;
+        
+        $usuario->update();
+
+        return "Dados alterados com sucesso!";
     }
 
     /**
@@ -68,7 +66,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(!$usuario = User::find($id)){
+            return redirect()->route('listar.nivel.usuario');
+        }
+
+        $usuarios = User::all();
+
+        return view('editarnivelusuario', compact('usuario','usuarios'));
     }
 
     /**
@@ -94,85 +98,87 @@ class UserController extends Controller
         //
     }
 
-    public function adicionarAdmGeral()
+    public function listarNivelUsuario()
     {
-        return view('adicionarAdmGeral');
+        $usuarios = User::all();
+
+        return view('listarusuarios', compact('usuarios'));
     }
 
-    public function adicionarAdm()
-    {
-        return view('adicionarAdm');
-    }
+    // public function adicionarAdm()
+    // {
+    //     return view('adicionarAdm');
+    // }
 
-    public function adicionarAdmStore(Request $request)
+    // public function adicionarAdmStore(Request $request)
 
-    {
-        $userAdm = new User;
+    // {
+    //     $userAdm = new User;
 
-        $userAdm->name = $request->name;
-        $userAdm->password = $request->password;
-        $userAdm->email = $request->email;
-        $userAdm->permissao_id = 2;
+    //     $userAdm->name = $request->name;
+    //     $userAdm->password = $request->password;
+    //     $userAdm->email = $request->email;
+    //     $userAdm->permissao_id = 2;
 
-        $userAdm->save();
+    //     $userAdm->save();
 
-        return redirect()->route('add.adm')->with('success', 'ADM cadastrado com sucesso');
-    }
+    //     return redirect()->route('add.adm')->with('success', 'ADM cadastrado com sucesso');
+    // }
 
-    public function adicionarColaborador()
-    {
-        return view ('adicionarColaborador');
-    }
+    // public function adicionarColaborador()
+    // {
+    //     return view ('adicionarColaborador');
+    // }
 
-    public function adicionarColaboradorStore(Request $request)
-    {
-        $userColaborador = new User;
+    // public function adicionarColaboradorStore(Request $request)
+    // {
+    //     $userColaborador = new User;
 
-        $userColaborador->name = $request->name;
-        $userColaborador->password = $request->password;
-        $userColaborador->email = $request->email;
-        $userColaborador->permissao_id = 1;
+    //     $userColaborador->name = $request->name;
+    //     $userColaborador->password = $request->password;
+    //     $userColaborador->email = $request->email;
+    //     $userColaborador->permissao_id = 1;
 
-        $userColaborador->save();
+    //     $userColaborador->save();
 
-        return redirect()->route('add.colaborador')->with('success', 'Colaborador cadastrado com sucesso');
-    }
+    //     return redirect()->route('add.colaborador')->with('success', 'Colaborador cadastrado com sucesso');
+    // }
 
-    public function adicionarUsuario()
-    {
-        return view ('adicionarUsuario');
-    }
+    // public function adicionarUsuario()
+    // {
+    //     return view ('adicionarUsuario');
+    // }
 
-    public function adicionarUsuarioStore(Request $request)
-    {
-        $user = new User;
+    // public function adicionarUsuarioStore(Request $request)
+    // {
+    //     $user = new User;
 
-        $user->name = $request->name;
-        $user->password = $request->password;
-        $user->email = $request->email;
-        $user->permissao_id = 0;
+    //     $user->name = $request->name;
+    //     $user->password = $request->password;
+    //     $user->email = $request->email;
+    //     $user->permissao_id = 0;
 
-        $user->save();
+    //     $user->save();
 
-        return redirect()->route('add.colaborador')->with('success', 'Usuario cadastrado com sucesso');
-    }
+    //     return redirect()->route('add.colaborador')->with('success', 'Usuario cadastrado com sucesso');
+    // }
 
-    public function adicionarPermissao()
-    {
-        return view('adicionarpermissao');
-    }
+    // public function adicionarPermissao()
+    // {
+    //     return view('adicionarpermissao');
+    // }
 
-    public function adicionarPermissaoStore(Request $request)
-    {
-        $permissao = new Permissao;
+    // public function adicionarPermissaoStore(Request $request)
+    // {
+    //     $permissao = new Permissao;
 
-        $permissao->nome = $request->nome;
-        $permissao->permissao = $request->permissao;
+    //     $permissao->nome = $request->nome;
+    //     $permissao->permissao = $request->permissao;
         
-        $permissao->save();
+    //     $permissao->save();
 
-        return redirect()->route('add.permissao')->with('success', 'Permissão cadastrada com sucesso');
-    }
+    //     return redirect()->route('add.permissao')->with('success', 'Permissão cadastrada com sucesso');
+    // }
 
     public function dashboard(Request $request)
     {

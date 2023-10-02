@@ -12,7 +12,7 @@ class Permissao extends Model
     protected $primaryKey = 'permissao';
 
     protected $fillable = [
-        'name',
+        'nome',
         'permissao',
     ];
 
