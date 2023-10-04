@@ -7,10 +7,16 @@
     <title>Adicionar permissão</title>
 </head>
 <body>
-    <form action="{{route('add.permissao')}}" method="POST">
+    <form action="/adicionar-permissao" method="POST">
         @csrf
         <input type="text" name="nome" placeholder="nome da permissao">
-        <input type="number" name="permissao" placeholder="permissao de 0 a 3">
+        <input type="number" name="permissao" placeholder="permissao de da permissão">
+        <select>
+            <option selected disabled=""> Permissões cadastradas</option>
+            @foreach($permissoes as $permissao)
+                <option value="{{$permissao->nome}}" disabled="">{{$permissao->permissao}} - {{$permissao->nome}}</option>
+            @endforeach
+        </select>
         <input type="submit" value="Cadastrar">
     </form>
 </body>

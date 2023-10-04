@@ -19,6 +19,8 @@ Route::get('/', [LoginController::class, 'login']);
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/dashboard', [UserController::class, 'dashboard']);
+Route::get('/cadastrar', [UserController::class, 'cadastrar']);
+Route::post('/cadastrar', [UserController::class, 'cadastrarStore']);
 
 Route::middleware(['auth'])->group(function () {
 
@@ -28,14 +30,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/editar-nivel-usuario/{id}', [UserController::class, 'store'])->name('editar.nivel.usuario');
     Route::get('/editar-nivel-usuario/{id}', [UserController::class, 'edit'])->name('editar.nivel.usuario');
 
-    // Route::get('/adicionaradm', [UserController::class, 'adicionarAdm'])->name('add.adm');
-    // Route::post('/adicionaradm', [UserController::class, 'adicionarAdmStore'])->name('add.adm');
+    Route::get('/adicionar-permissao', [UserController::class, 'adicionarPermissao'])->name('adicionar.permissao');
+    Route::post('/adicionar-permissao', [UserController::class, 'adicionarPermissaoStore']);
 
-    // Route::get('/adicionarcolaborador', [UserController::class, 'adicionarColaborador'])->name('add.colaborador');
-    // Route::post('/adicionarcolaborador', [UserController::class, 'adicionarColaboradorStore'])->name('add.colaborador');
-
-    // Route::get('/adicionarpermissao', [UserController::class, 'adicionarpermissao'])->name('add.permissao');
-    // Route::post('/adicionarpermissao', [UserController::class, 'adicionarpermissaoStore'])->name('add.permissao');
+    Route::get('/adicionarcolaborador', [UserController::class, 'adicionarColaborador'])->name('adicionar.colaborador');
+    Route::post('/adicionarcolaborador', [UserController::class, 'adicionarColaboradorStore']);
+    Route::get('/colaboradores', [UserController::class, 'listarColaboradores']);
 
 });
 

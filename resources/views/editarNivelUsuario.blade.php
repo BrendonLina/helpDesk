@@ -11,11 +11,17 @@
     <form action="#" method="post">
         @csrf
         @method('PUT')
+        {{-- <select name="permissao">
+             @foreach($usuarios as $usuario) 
+                <option value="{{$usuario->permissao_id}}">{{$usuario->permissao->nome}}</option>                      
+             @endforeach 
+        </select> --}}
         <select name="permissao">
-            @foreach($usuarios as $usuario)
-            <option value="{{$usuario->permissao_id}}">{{$usuario->permissao->nome}}</option>      
-            @endforeach
-        </select>
+            @foreach($permissoes as $permissao) 
+               <option value="{{$permissao->permissao}}">{{$permissao->nome}}</option>                      
+            @endforeach 
+       </select>
+
         <input type="submit" value="Alterar">
     </form>
 </body>

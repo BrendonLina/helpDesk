@@ -26,6 +26,7 @@
             <span>{{$message}}</span>
         @enderror
         <input type="submit" value="Entrar">
+        <a href="/cadastrar">não tem conta? cadastre-se!</a>
     </form>
 </body>
 </html>

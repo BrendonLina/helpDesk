@@ -41,7 +41,7 @@ class UserController extends Controller
         $usuario = User::find($id);
 
         $usuario->permissao_id = $request->permissao;
-        
+    
         $usuario->update();
 
         return "Dados alterados com sucesso!";
@@ -71,8 +71,9 @@ class UserController extends Controller
         }
 
         $usuarios = User::all();
+        $permissoes = Permissao::all();
 
-        return view('editarnivelusuario', compact('usuario','usuarios'));
+        return view('editarnivelusuario', compact('usuario','usuarios','permissoes'));
     }
 
     /**
@@ -100,85 +101,56 @@ class UserController extends Controller
 
     public function listarNivelUsuario()
     {
-        $usuarios = User::all();
+        //usar assim ou criar um middleware
+        if(Auth::user()->permissao_id != 1)
+        {
+            return redirect('dashboard');
+        }
+        $usuarios = User::where('permissao_id', '<>', 1)->get();
 
         return view('listarusuarios', compact('usuarios'));
     }
 
-    // public function adicionarAdm()
-    // {
-    //     return view('adicionarAdm');
-    // }
 
-    // public function adicionarAdmStore(Request $request)
+    public function adicionarColaborador()
+    {
+        return view ('adicionarColaborador');
+    }
 
-    // {
-    //     $userAdm = new User;
-
-    //     $userAdm->name = $request->name;
-    //     $userAdm->password = $request->password;
-    //     $userAdm->email = $request->email;
-    //     $userAdm->permissao_id = 2;
-
-    //     $userAdm->save();
-
-    //     return redirect()->route('add.adm')->with('success', 'ADM cadastrado com sucesso');
-    // }
-
-    // public function adicionarColaborador()
-    // {
-    //     return view ('adicionarColaborador');
-    // }
-
-    // public function adicionarColaboradorStore(Request $request)
-    // {
-    //     $userColaborador = new User;
-
-    //     $userColaborador->name = $request->name;
-    //     $userColaborador->password = $request->password;
-    //     $userColaborador->email = $request->email;
-    //     $userColaborador->permissao_id = 1;
-
-    //     $userColaborador->save();
-
-    //     return redirect()->route('add.colaborador')->with('success', 'Colaborador cadastrado com sucesso');
-    // }
-
-    // public function adicionarUsuario()
-    // {
-    //     return view ('adicionarUsuario');
-    // }
-
-    // public function adicionarUsuarioStore(Request $request)
-    // {
-    //     $user = new User;
-
-    //     $user->name = $request->name;
-    //     $user->password = $request->password;
-    //     $user->email = $request->email;
-    //     $user->permissao_id = 0;
-
-    //     $user->save();
-
-    //     return redirect()->route('add.colaborador')->with('success', 'Usuario cadastrado com sucesso');
-    // }
-
-    // public function adicionarPermissao()
-    // {
-    //     return view('adicionarpermissao');
-    // }
-
-    // public function adicionarPermissaoStore(Request $request)
-    // {
-    //     $permissao = new Permissao;
-
-    //     $permissao->nome = $request->nome;
-    //     $permissao->permissao = $request->permissao;
+    public function adicionarColaboradorStore(Request $request)
+    {
         
-    //     $permissao->save();
+        $userColaborador = new User;
 
-    //     return redirect()->route('add.permissao')->with('success', 'Permissão cadastrada com sucesso');
-    // }
+        $userColaborador->name = $request->name;
+        $userColaborador->password = bcrypt(123456);
+        $userColaborador->email = $request->email;
+        $userColaborador->permissao_id = 3;
+        $userColaborador->nome_empresa = Auth::user()->nome_empresa;
+
+        $userColaborador->save();
+
+        return redirect()->route('adicionar.colaborador')->with('success', 'Colaborador cadastrado com sucesso');
+    }
+
+    
+    public function adicionarPermissao()
+    {
+        $permissoes = Permissao::all();
+        return view('adicionarpermissao', compact('permissoes'));
+    }
+
+    public function adicionarPermissaoStore(Request $request)
+    {
+        $permissao = new Permissao;
+
+        $permissao->nome = $request->nome;
+        $permissao->permissao = $request->permissao;
+        
+        $permissao->save();
+
+        return redirect()->route('adicionar.permissao')->with('success', 'Permissão cadastrada com sucesso');
+    }
 
     public function dashboard(Request $request)
     {
@@ -202,6 +174,34 @@ class UserController extends Controller
 
             return redirect()->back()->with('danger','Email ou Senha incorreto');
         }
+    }
+
+    public function cadastrar()
+    {
+        return view('cadastrar');
+    }
+
+    public function cadastrarStore(Request $request)
+    {
+        $usuario = new User;
+
+        $usuario->nome_empresa = $request->nome_empresa;
+        $usuario->name = $request->name;
+        $usuario->email = $request->email;
+        $usuario->password = bcrypt($request->password);
+        $usuario->permissao_id = 2;
+
+        $usuario->save();
+
+        return redirect('login');
+    }
+
+    public function listarColaboradores()
+    {
+        $empresa = Auth::user()->nome_empresa;
+        $userEmpresa = User::where('nome_empresa','=',$empresa)->get();
+
+        return view('listarColaboradores', compact('userEmpresa'));
     }
 
     

@@ -7,12 +7,18 @@
     <title>Dashboard</title>
 </head>
 <body>
+    {{-- lembrar de trocar o if por switch case --}}
     <h1>Dashboard</h1>
     <p>{{Auth::user()->name}}</p>
     <p>{{Auth::user()->permissao->nome}}</p>
+
     @if(Auth::user()->permissao->id == 1)
-    <a href="#">Adicionar Permissões</a>
+    <a href="/adicionar-permissao">Adicionar Permissões</a>
     <a href="/listar-usuarios">Editar nivel de usuário</a>
+    @endif
+    @if(Auth::user()->permissao->id == 2)
+        <a href="/adicionarcolaborador">Adicionar colaboradores</a>
+        <a href="/colaboradores">Colaboradores da empresa</a>
     @endif
     <a href="/logout">sair</a>
 </body>
