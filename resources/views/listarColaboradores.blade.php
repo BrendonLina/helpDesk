@@ -7,9 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>Listando usuarios da empresa</h3>
+    <h3>Listando colaboradores/usuarios da empresa</h3>
+   
     @foreach ($userEmpresa as $empresa )
-        <p>{{$empresa->name}}</p>    
+        <p><b>Nome:</b> {{$empresa->name}} - {{$empresa->permissao->nome}}</p>    
     @endforeach
+
 </body>
 </html>

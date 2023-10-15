@@ -18,7 +18,8 @@
     @endif
     @if(Auth::user()->permissao->id == 2)
         <a href="/adicionarcolaborador">Adicionar colaboradores</a>
-        <a href="/colaboradores">Colaboradores da empresa</a>
+        <a href="/adicionarusuario">Adicionar usuarios</a>
+        <a href="/colaboradores">Usuarios/Colaboradores da empresa</a>
     @endif
     <a href="/logout">sair</a>
 </body>

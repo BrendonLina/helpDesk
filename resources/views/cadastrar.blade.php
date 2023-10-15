@@ -7,7 +7,7 @@
     <title>cadastrar</title>
 </head>
 <body>
-    <h3>cadastrando empresa/colaborador</h3>
+    <h3>cadastrando colaborador</h3>
     <form action="/cadastrar" method="POST">
         @csrf
 

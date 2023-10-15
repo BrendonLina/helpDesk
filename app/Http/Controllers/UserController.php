@@ -71,7 +71,8 @@ class UserController extends Controller
         }
 
         $usuarios = User::all();
-        $permissoes = Permissao::all();
+        // $permissoes = Permissao::all();
+        $permissoes = Permissao::where('nome', '<>', 'adm geral')->get();
 
         return view('editarnivelusuario', compact('usuario','usuarios','permissoes'));
     }
@@ -198,10 +199,34 @@ class UserController extends Controller
 
     public function listarColaboradores()
     {
+    
         $empresa = Auth::user()->nome_empresa;
-        $userEmpresa = User::where('nome_empresa','=',$empresa)->get();
+        $userEmpresa = User::where('nome_empresa','=',$empresa)
+        ->where('permissao_id','<>', 2)
+        ->with('permissao')
+        ->get();
 
-        return view('listarColaboradores', compact('userEmpresa'));
+        return view('listarColaboradores', compact('userEmpresa','empresa'));
+    }
+
+    public function adicionarUsuario()
+    {
+        return view('adicionarUsuario');
+    }
+
+    public function adicionarUsuarioStore(Request $request)
+    {
+        $user = new User;
+
+        $user->name = $request->name;
+        $user->password = bcrypt(123456);
+        $user->email = $request->email;
+        $user->permissao_id = 4;
+        $user->nome_empresa = Auth::user()->nome_empresa;
+
+        $user->save();
+
+        return redirect()->route('adicionar.usuario')->with('success', 'Colaborador cadastrado com sucesso');
     }
 
     
