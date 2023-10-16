@@ -16,13 +16,17 @@ class Adm
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->permissao_id == 1 || auth()->user()->permissao_id == 2)
-        {
-            return $next($request);
+        if (auth()->check()) {
+            $user = auth()->user()->permissao_id;
+    
+            if (!($user == 1 || $user == 2 )) {
+                return redirect()->route('dashboard');
+            }
+        } else {
+            // O usuário não está autenticado, redirecione para a página de login
+            return redirect()->route('login');
         }
-        else{
-            
-            return redirect('dashboard');
-        }
+    
+        return $next($request);
     }
 }

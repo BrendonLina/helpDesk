@@ -22,22 +22,37 @@ Route::post('/dashboard', [UserController::class, 'dashboard']);
 Route::get('/cadastrar', [UserController::class, 'cadastrar']);
 Route::post('/cadastrar', [UserController::class, 'cadastrarStore']);
 
-Route::middleware(['auth','admgeral','adm'])->group(function () {
+//habilitar para primeiro acesso assim que projeto for clonado ou hospedado
+
+// Route::get('/adicionaradmgeral', [UserController::class, 'adicionarAdmGeral']);
+// Route::post('/adicionaradmgeral', [UserController::class, 'adicionarAdmGeralStore']);
+
+// Route::get('/adicionar-permissao', [UserController::class, 'adicionarPermissao']);
+// Route::post('/adicionar-permissao', [UserController::class, 'adicionarPermissaoStore']);
+
+
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
 
-    Route::get('/listar-usuarios', [UserController::class, 'listarNivelUsuario'])->name('listar.nivel.usuario')->middleware('admgeral');
-    Route::put('/editar-nivel-usuario/{id}', [UserController::class, 'store'])->name('editar.nivel.usuario')->middleware('admgeral');
-    Route::get('/editar-nivel-usuario/{id}', [UserController::class, 'edit'])->name('editar.nivel.usuario')->middleware('admgeral');
 
-    Route::get('/adicionar-permissao', [UserController::class, 'adicionarPermissao'])->name('adicionar.permissao')->middleware('admgeral');
+    Route::get('/listar-usuarios', [UserController::class, 'listarNivelUsuario'])->middleware('admgeral')->name('listar.nivel.usuario');
+    Route::put('/editar-nivel-usuario/{id}', [UserController::class, 'store'])->middleware('admgeral')->name('editar.nivel.usuario');
+    Route::get('/editar-nivel-usuario/{id}', [UserController::class, 'edit'])->middleware('admgeral')->name('editar.nivel.usuario');
+
+    Route::get('/adicionar-permissao', [UserController::class, 'adicionarPermissao'])->middleware('admgeral')->name('adicionar.permissao');
     Route::post('/adicionar-permissao', [UserController::class, 'adicionarPermissaoStore'])->middleware('admgeral');
 
-    Route::get('/adicionarcolaborador', [UserController::class, 'adicionarColaborador'])->name('adicionar.colaborador')->middleware('adm');
+    Route::get('/adicionarcolaborador', [UserController::class, 'adicionarColaborador'])->middleware('adm')->name('adicionar.colaborador');
     Route::post('/adicionarcolaborador', [UserController::class, 'adicionarColaboradorStore'])->middleware('adm');
-    Route::get('/adicionarusuario', [UserController::class, 'adicionarUsuario'])->name('adicionar.usuario')->middleware('adm');
+    Route::get('/adicionarusuario', [UserController::class, 'adicionarUsuario'])->middleware('adm')->name('adicionar.usuario');
     Route::post('/adicionarusuario', [UserController::class, 'adicionarUsuarioStore'])->middleware('adm');
-    Route::get('/colaboradores', [UserController::class, 'listarColaboradores'])->middleware('admgeral')->middleware('adm');
+    Route::get('/colaboradores', [UserController::class, 'listarColaboradores'])->middleware('adm');
+
+    Route::get('/chamados', [UserController::class, 'chamados']);
+    Route::get('/criarchamado', [UserController::class, 'criarChamado']);
+    Route::post('/criarchamado', [UserController::class, 'criarChamadoStore']);
+    Route::get('/chamadosusuario', [UserController::class, 'chamadosUsuario']);
 
 });
 

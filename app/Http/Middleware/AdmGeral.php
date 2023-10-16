@@ -15,15 +15,25 @@ class AdmGeral
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    {
-        if(auth()->user()->permissao_id == 1)
-        {
-            return $next($request);
-        }
-        else{
-            
-            return redirect('dashboard');
-        }
+{
+    if (auth()->check()) {
+        $user = auth()->user()->permissao_id;
 
+        if (!($user == 1 )) {
+            return redirect()->route('dashboard');
+        }
+    } else {
+        // O usuário não está autenticado, redirecione para a página de login
+        return redirect()->route('login');
     }
+
+    return $next($request);
+}
+
+
+
+
+
+
+
 }

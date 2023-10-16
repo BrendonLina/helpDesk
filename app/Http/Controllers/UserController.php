@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Permissao;
+use App\Models\Chamado;
 
 class UserController extends Controller
 {
@@ -150,7 +151,9 @@ class UserController extends Controller
         
         $permissao->save();
 
-        return redirect()->route('adicionar.permissao')->with('success', 'Permissão cadastrada com sucesso');
+        // return redirect()->route('adicionar.permissao')->with('success', 'Permissão cadastrada com sucesso');
+
+        return "Dados cadastrados com sucesso";
     }
 
     public function dashboard(Request $request)
@@ -229,5 +232,79 @@ class UserController extends Controller
         return redirect()->route('adicionar.usuario')->with('success', 'Colaborador cadastrado com sucesso');
     }
 
-    
+    public function adicionarAdmGeral()
+    {
+        return view('adicionarAdmGeral');
+    }
+
+    public function adicionarAdmGeralStore(Request $request)
+    {
+        $userAdmGeral = new User;
+
+        $userAdmGeral->name = $request->name;
+        $userAdmGeral->email = $request->email;
+        $userAdmGeral->password = bcrypt($request->password);
+        $userAdmGeral->permissao_id = 1;
+        $userAdmGeral->nome_empresa = null;
+
+        $userAdmGeral->save();
+
+        return redirect()->route('dashboard')->with('success', 'Colaborador cadastrado com sucesso');
+    }
+
+    public function chamados()
+    {
+        return view('chamados');
+    }
+
+    public function criarChamado()
+    {
+        return view('criarchamado');
+    }
+
+    public function criarChamadoStore(Request $request)
+    {
+        $request->validate([
+            'titulo' => 'required|max:20|min:3',
+            'descricao' => 'required|max:255|min:3',
+            'imagem' => 'image',
+        ],[
+            'titulo.required' => 'Titulo é obrigatório.',
+            'titulo.max' => 'Limite de 20 caracteres excedito.',
+            'titulo.min' => 'Limite minimo de 3 caracteres.',
+            'descricao.required' => 'descrição é obrigatorio.',
+            'descricao.max' => 'Limite de 255 caracteres excedito.',
+            'descricao.min' => 'Limite minimo de 3 caracteres.',
+            'imagem.image' => 'o arquivo precisa ser uma imagem.',
+            
+        ]);
+
+        $userChamado = new Chamado;
+
+        $userChamado->titulo = $request->titulo;
+
+        $userChamado->user_id = Auth::user()->id;
+
+        if($request->imagem->isValid())
+        {
+            $request->imagem->store('chamados');
+        };
+
+        $userChamado->descricao = $request->descricao;
+
+        $userChamado->save();
+
+        return redirect()->route('dashboard')->with('success', 'Colaborador cadastrado com sucesso');
+
+
+    }
+
+    public function chamadosUsuario()
+    {
+        $chamadoUser = Auth::user()->chamados;
+
+        // dd($chamadoUser);
+        return view('meuschamados',compact('chamadoUser'));
+    }
+   
 }
