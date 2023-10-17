@@ -254,7 +254,10 @@ class UserController extends Controller
 
     public function chamados()
     {
-        return view('chamados');
+        $chamados = Chamado::where('status', 'Ativo')
+        ->orWhere('status', 'Pendente')
+        ->get();
+        return view('chamados', compact('chamados'));
     }
 
     public function criarChamado()
@@ -265,12 +268,12 @@ class UserController extends Controller
     public function criarChamadoStore(Request $request)
     {
         $request->validate([
-            'titulo' => 'required|max:20|min:3',
+            'titulo' => 'required|max:30|min:3',
             'descricao' => 'required|max:255|min:3',
             'imagem' => 'image',
         ],[
             'titulo.required' => 'Titulo é obrigatório.',
-            'titulo.max' => 'Limite de 20 caracteres excedito.',
+            'titulo.max' => 'Limite de 30 caracteres excedito.',
             'titulo.min' => 'Limite minimo de 3 caracteres.',
             'descricao.required' => 'descrição é obrigatorio.',
             'descricao.max' => 'Limite de 255 caracteres excedito.',
@@ -292,6 +295,8 @@ class UserController extends Controller
 
         $userChamado->descricao = $request->descricao;
 
+        $userChamado->status = "Ativo";
+
         $userChamado->save();
 
         return redirect()->route('dashboard')->with('success', 'Colaborador cadastrado com sucesso');
@@ -303,7 +308,6 @@ class UserController extends Controller
     {
         $chamadoUser = Auth::user()->chamados;
 
-        // dd($chamadoUser);
         return view('meuschamados',compact('chamadoUser'));
     }
    
